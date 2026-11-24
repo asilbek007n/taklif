@@ -1,0 +1,623 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Sizni Kutaman</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Great+Vibes&family=Jost:wght@400;500&display=swap">
+<style>
+/* Layout: bitta ustunli taklifnoma. Tepada aylanuvchi 3D yurak, pastda egilib turadigan karta, orqada tushayotgan gul barglari. */
+:root {
+  --night: #16060c;
+  --wine: #3a0f1f;
+  --rose: #ef5b7f;
+  --blush: #f8cdd7;
+  --gold: #e2bd7a;
+  --ink: #fdeef1;
+  --muted: #d6a3b0;
+  --font-script: 'Great Vibes', 'Snell Roundhand', 'Apple Chancery', cursive;
+  --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-ui: 'Jost', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--night);
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.5;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  padding-block: 28px 110px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.veil {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(900px 520px at 50% -8%, rgba(239, 91, 127, .30), transparent 65%),
+    radial-gradient(700px 600px at 100% 100%, rgba(120, 20, 50, .55), transparent 70%),
+    radial-gradient(600px 500px at 0% 70%, rgba(90, 14, 40, .5), transparent 70%);
+}
+canvas.layer { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+#bg { z-index: 0; }
+#fx { z-index: 30; }
+main { position: relative; z-index: 1; max-width: 680px; margin-inline: auto; }
+
+.hero { display: grid; justify-items: center; text-align: center; gap: 4px; }
+.eyebrow {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 500;
+  letter-spacing: .34em; text-transform: uppercase; color: var(--gold);
+  margin: 8px 0 0;
+}
+#heart3d { width: min(62vw, 250px); max-width: 100%; aspect-ratio: 1; display: block; }
+h1.script {
+  font-family: var(--font-script); font-weight: 400;
+  font-size: clamp(3.2rem, 13vw, 5.6rem); line-height: 1.05; margin: -6px 0 0;
+  color: var(--blush); text-wrap: balance;
+  text-shadow: 0 0 28px rgba(239, 91, 127, .55);
+}
+.lede {
+  max-width: 34ch; margin: 10px 0 0; font-style: italic; font-size: 1.25rem;
+  color: var(--muted); text-wrap: balance;
+}
+
+.stage { perspective: 1200px; margin-top: 40px; display: grid; justify-items: center; }
+.float { width: min(100%, 580px); transform-style: preserve-3d; animation: float 8s ease-in-out infinite alternate; }
+@keyframes float {
+  from { transform: translateY(-6px) rotateZ(-.4deg); }
+  to { transform: translateY(8px) rotateZ(.4deg); }
+}
+.card3d {
+  position: relative; transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  will-change: transform;
+}
+.face {
+  position: absolute; inset: 0; border-radius: 6px; overflow: hidden;
+  background: linear-gradient(160deg, rgba(78, 18, 38, .94), rgba(30, 8, 16, .97));
+  border: 1px solid rgba(226, 189, 122, .5);
+  box-shadow: 0 34px 60px -24px rgba(0, 0, 0, .75), 0 0 90px -24px rgba(239, 91, 127, .4);
+  transition: box-shadow .6s ease, border-color .6s ease;
+}
+.face::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(420px circle at var(--gx, 30%) var(--gy, 0%), rgba(255, 226, 232, .17), transparent 60%);
+}
+.face::after {
+  content: ""; position: absolute; inset: 10px; border: 1px solid rgba(226, 189, 122, .22);
+  border-radius: 3px; pointer-events: none;
+}
+.card3d.accepted .face {
+  border-color: rgba(248, 205, 215, .85);
+  box-shadow: 0 34px 60px -24px rgba(0, 0, 0, .75), 0 0 120px -10px rgba(239, 91, 127, .75);
+}
+.content {
+  position: relative; transform-style: preserve-3d; display: grid; gap: 24px;
+  padding: 40px clamp(20px, 6vw, 48px) 32px;
+}
+.z1 { transform: translateZ(22px); }
+.z2 { transform: translateZ(40px); }
+.z3 { transform: translateZ(58px); }
+
+.label {
+  font-family: var(--font-ui); font-size: 12px; font-weight: 500; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--gold); text-align: center; margin: 0;
+}
+.title {
+  font-size: clamp(1.8rem, 6.4vw, 2.5rem); line-height: 1.14; font-style: italic; font-weight: 600;
+  text-align: center; margin: 0; color: var(--ink); text-wrap: balance;
+}
+.divider { display: flex; align-items: center; gap: 14px; }
+.divider::before, .divider::after {
+  content: ""; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(226, 189, 122, .6));
+}
+.divider::after { transform: scaleX(-1); }
+.divider svg { width: 18px; height: 18px; fill: var(--rose); filter: drop-shadow(0 0 6px rgba(239, 91, 127, .8)); }
+
+.details { display: grid; gap: 0; margin: 0; }
+.item { display: flex; gap: 14px; align-items: flex-start; min-width: 0; padding: 14px 0; }
+.item + .item { border-top: 1px solid rgba(226, 189, 122, .2); }
+.maplink {
+  display: inline-flex; align-items: center; min-height: 44px; margin-top: 2px;
+  font-family: var(--font-ui); font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); text-decoration: underline; text-underline-offset: 5px;
+}
+.maplink:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.item svg { flex: none; width: 24px; height: 24px; margin-top: 3px; stroke: var(--gold); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.item dt { font-family: var(--font-ui); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+.item dd { margin: 2px 0 0; font-size: 1.3rem; line-height: 1.25; overflow-wrap: anywhere; }
+
+.msg { text-align: center; font-style: italic; font-size: 1.25rem; color: var(--blush); margin: 0; text-wrap: balance; }
+
+.countdown { display: grid; gap: 10px; }
+.countdown .label { color: var(--muted); }
+.count { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.cell { border: 1px solid rgba(226, 189, 122, .3); padding: 10px 2px 8px; text-align: center; min-width: 0; }
+.cell b { display: block; font-weight: 600; font-size: clamp(1.5rem, 6vw, 2rem); line-height: 1.1; font-variant-numeric: tabular-nums; color: var(--ink); }
+.cell span { font-family: var(--font-ui); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+
+.actions { display: flex; flex-direction: column; gap: 12px; align-items: stretch; min-height: 54px; }
+.btn {
+  font-family: var(--font-ui); font-size: 14px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+  padding: 15px 24px; min-height: 54px; width: 100%; border-radius: 999px; cursor: pointer; color: var(--blush);
+  background: transparent; border: 1px solid rgba(226, 189, 122, .55);
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:focus-visible, .music:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.btn.primary {
+  color: #2a0610; border-color: transparent;
+  background: linear-gradient(135deg, #ff8fab, #ef5b7f 55%, #d63a63);
+  box-shadow: 0 10px 28px -8px rgba(239, 91, 127, .8);
+}
+.btn.primary:hover { box-shadow: 0 14px 34px -6px rgba(239, 91, 127, .95); }
+.slot { display: block; width: 100%; }
+#no.flying {
+  position: fixed; z-index: 40; margin: 0; width: auto;
+  background: rgba(22, 6, 12, .9);
+  transition: left .38s cubic-bezier(.2, .9, .3, 1.15), top .38s cubic-bezier(.2, .9, .3, 1.15), transform .2s ease;
+}
+#reply { text-align: center; margin: 0; min-height: 1.5em; font-style: italic; font-size: 1.3rem; color: var(--blush); }
+
+.sign { text-align: center; margin: 36px 0 0; font-style: italic; color: var(--muted); font-size: 1.05rem; }
+
+.music {
+  position: fixed; z-index: 50;
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--font-ui); font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--blush); background: rgba(40, 10, 22, .88); border: 1px solid rgba(226, 189, 122, .55);
+  border-radius: 999px; padding: 12px 18px 12px 16px; cursor: pointer;
+}
+.music .bars { display: inline-flex; align-items: flex-end; gap: 3px; height: 16px; }
+.music .bars i { width: 3px; height: 5px; background: var(--rose); border-radius: 2px; }
+.music.on .bars i { animation: eq 1s ease-in-out infinite; }
+.music.on .bars i:nth-child(2) { animation-delay: .2s; }
+.music.on .bars i:nth-child(3) { animation-delay: .4s; }
+@keyframes eq { 0%, 100% { height: 5px; } 50% { height: 16px; } }
+.music.hint::after {
+  content: ""; position: absolute; inset: -5px; border-radius: 999px; border: 1px solid var(--rose);
+  animation: ring 2s ease-out infinite;
+}
+@keyframes ring { from { transform: scale(.94); opacity: .9; } to { transform: scale(1.25); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .float, .music.on .bars i, .music.hint::after { animation: none; }
+  .btn, #no.flying { transition: none; }
+}
+</style>
+
+<div class="veil" aria-hidden="true"></div>
+<canvas id="bg" class="layer" aria-hidden="true"></canvas>
+
+<main>
+  <header class="hero">
+    <p class="eyebrow">Shaxsiy taklifnoma</p>
+    <canvas id="heart3d" aria-hidden="true"></canvas>
+    <h1 class="script">Sizni kutaman</h1>
+    <p class="lede">Ko‘rishsak, gaplashsak, birga vaqt o‘tkazsak. Men shuni xohlayman.</p>
+  </header>
+
+  <section class="stage" aria-label="Taklifnoma">
+    <div class="float">
+      <div class="card3d" id="card">
+        <div class="face"></div>
+        <div class="content">
+          <p class="label z1" id="label">Uchrashuv taklifi</p>
+          <h2 class="title z3" id="title">Sizni uchrashuvga taklif qilaman</h2>
+
+          <div class="divider z1" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 21C12 21 4 16.5 2.5 11 1.6 7.6 3.8 5 6.7 5c2 0 3.5 1.2 5.3 3.1C13.8 6.2 15.3 5 17.3 5c2.9 0 5.1 2.6 4.2 6C20 16.5 12 21 12 21Z"/></svg>
+          </div>
+
+          <dl class="details z2">
+            <div class="item">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+              <div><dt>Kun</dt><dd id="dDate"></dd></div>
+            </div>
+            <div class="item">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+              <div><dt>Vaqt</dt><dd id="dTime"></dd></div>
+            </div>
+            <div class="item">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.7-6.5-11a6.5 6.5 0 0 1 13 0c0 5.3-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.3"/></svg>
+              <div><dt>Joy</dt><dd id="dPlace"></dd><a class="maplink" href="https://www.google.com/maps/search/?api=1&query=Navruz+mall" target="_blank" rel="noopener">Xaritada ochish</a></div>
+            </div>
+          </dl>
+
+          <p class="msg z2" id="msg">Oddiy uchrashuv, lekin men uchun muhim. Kelasizmi?</p>
+
+          <div class="countdown z1" id="cdWrap">
+            <p class="label">Uchrashuvgacha</p>
+            <div class="count" role="timer" aria-live="off">
+              <div class="cell"><b id="cD">00</b><span>kun</span></div>
+              <div class="cell"><b id="cH">00</b><span>soat</span></div>
+              <div class="cell"><b id="cM">00</b><span>daqiqa</span></div>
+              <div class="cell"><b id="cS">00</b><span>soniya</span></div>
+            </div>
+          </div>
+
+          <div class="actions z3" id="actions">
+            <button class="btn primary" id="yes" type="button">Ha, albatta boraman</button>
+            <span class="slot" id="slot"><button class="btn" id="no" type="button">Yo‘q</button></span>
+          </div>
+          <p id="reply" class="z2" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="sign">Faqat siz uchun, mehr bilan.</p>
+</main>
+
+<canvas id="fx" class="layer" aria-hidden="true"></canvas>
+
+<button class="music hint" id="music" type="button" aria-pressed="false">
+  <span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>
+  <span id="musicLabel">Musiqani yoqish</span>
+</button>
+
+<script>
+(() => {
+  'use strict';
+
+  /* Uchrashuv ma'lumotlari. Shu yerda o‘zgartiriladi. */
+  const CONFIG = {
+    when: '2026-11-25T11:00:00+05:00',
+    dateLabel: 'Chorshanba, 25-noyabr',
+    timeLabel: '11:00',
+    place: 'Navruz mall oldida'
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const COLORS = ['#ef5b7f', '#f8cdd7', '#c4274f', '#e2bd7a', '#ff8fab'];
+  const pick = (a) => a[Math.floor(Math.random() * a.length)];
+
+  $('dDate').textContent = CONFIG.dateLabel;
+  $('dTime').textContent = CONFIG.timeLabel;
+  $('dPlace').textContent = CONFIG.place;
+
+  const HEART = new Path2D('M12 21C12 21 4 16.5 2.5 11 1.6 7.6 3.8 5 6.7 5c2 0 3.5 1.2 5.3 3.1C13.8 6.2 15.3 5 17.3 5c2.9 0 5.1 2.6 4.2 6C20 16.5 12 21 12 21Z');
+  const PETAL = new Path2D('M0 -12C8 -10 10 4 0 12C-10 4 -8 -10 0 -12Z');
+
+  function fit(c) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = c.clientWidth, h = c.clientHeight;
+    c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
+    const ctx = c.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx, w, h };
+  }
+  function drawHeart(ctx, x, y, s, rot) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s / 24, s / 24); ctx.translate(-12, -13);
+    ctx.fill(HEART); ctx.restore();
+  }
+
+  /* ---------- Orqa fon: tushayotgan gul barglari va yuraklar ---------- */
+  let B = fit($('bg'));
+  const NP = RM ? 16 : (window.innerWidth < 600 ? 34 : 62);
+  function mkPetal(initial) {
+    const z = .25 + Math.random() * .75;
+    return {
+      x: Math.random(), y: initial ? Math.random() : -.08, z,
+      size: (14 + Math.random() * 16) * (.5 + z),
+      sway: Math.random() * 6.28, amp: 20 + Math.random() * 40,
+      vy: (14 + 34 * z) * (RM ? .35 : 1),
+      rot: Math.random() * 6.28, vr: (Math.random() - .5) * 1.2,
+      kind: Math.random() < .42 ? 0 : 1, col: pick(COLORS), a: .18 + .6 * z
+    };
+  }
+  const petals = Array.from({ length: NP }, () => mkPetal(true));
+  const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  let px = 0, py = 0, tpx = 0, tpy = 0;
+
+  function stepBg(dt) {
+    const { ctx, w, h } = B;
+    ctx.clearRect(0, 0, w, h);
+    px += (tpx - px) * .06; py += (tpy - py) * .06;
+    for (const p of petals) {
+      p.y += p.vy * dt / h; p.sway += dt * .8; p.rot += p.vr * dt;
+      if (p.y > 1.08) Object.assign(p, mkPetal(false));
+      const x = p.x * w + Math.sin(p.sway) * p.amp + px * p.z * 26;
+      const y = p.y * h + py * p.z * 18;
+      ctx.globalAlpha = p.a; ctx.fillStyle = p.col;
+      if (p.kind === 0) {
+        drawHeart(ctx, x, y, p.size, Math.sin(p.sway) * .5);
+      } else {
+        ctx.save(); ctx.translate(x, y); ctx.rotate(p.rot);
+        ctx.scale(p.size / 24 * (Math.abs(Math.cos(p.sway * 1.3)) * .8 + .2), p.size / 24);
+        ctx.fill(PETAL); ctx.restore();
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  /* ---------- 3D yurak: nuqtalar buluti ---------- */
+  let H = fit($('heart3d'));
+  const PX = [], PY = [], PZ = [];
+  (function build() {
+    let tries = 0;
+    while (PX.length < 2200 && tries < 2000000) {
+      tries++;
+      const x = (Math.random() * 2 - 1) * 1.3;
+      const y = (Math.random() * 2 - 1) * .7;
+      const z = -1.15 + Math.random() * 2.45;
+      const g = x * x + 2.25 * y * y + z * z - 1;
+      const f = g * g * g - x * x * z * z * z - .1125 * y * y * z * z * z;
+      if (Math.abs(f) < .018) { PX.push(x); PY.push(y); PZ.push(z); }
+    }
+  })();
+  const NPT = PX.length;
+  const sxA = new Float32Array(NPT), syA = new Float32Array(NPT), bkA = new Uint8Array(NPT);
+  const BK = 6;
+  function stepHeart(t) {
+    const { ctx, w, h } = H;
+    ctx.clearRect(0, 0, w, h);
+    const ph = (t * 1.1) % 1;
+    const beat = RM ? 1 : 1 + .08 * (Math.exp(-Math.pow((ph - .1) * 9, 2)) + .6 * Math.exp(-Math.pow((ph - .3) * 9, 2)));
+    const ang = t * (RM ? .12 : .6), ca = Math.cos(ang), sa = Math.sin(ang);
+    const pitch = .22, cp = Math.cos(pitch), sp = Math.sin(pitch);
+    const cx = w / 2, cy = h / 2 + h * .02, R = Math.min(w, h) * .34 * beat;
+    const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, w * .5);
+    glow.addColorStop(0, 'rgba(239,91,127,' + (.28 * beat).toFixed(3) + ')');
+    glow.addColorStop(1, 'rgba(239,91,127,0)');
+    ctx.fillStyle = glow; ctx.fillRect(0, 0, w, h);
+    for (let i = 0; i < NPT; i++) {
+      const x1 = PX[i] * ca - PY[i] * sa;
+      const d1 = PX[i] * sa + PY[i] * ca;
+      const z2 = PZ[i] * cp - d1 * sp;
+      const d2 = PZ[i] * sp + d1 * cp;
+      const k = 4 / (4 + d2);
+      sxA[i] = cx + x1 * k * R; syA[i] = cy - z2 * k * R;
+      const s = Math.max(0, Math.min(.999, (k - .78) / .5));
+      bkA[i] = Math.floor(s * BK);
+    }
+    ctx.globalCompositeOperation = 'lighter';
+    for (let b = 0; b < BK; b++) {
+      const s = (b + .5) / BK, r = .8 + 1.5 * s;
+      ctx.fillStyle = 'rgba(255,' + Math.round(70 + 110 * s) + ',' + Math.round(110 + 90 * s) + ',' + (.22 + .6 * s).toFixed(2) + ')';
+      ctx.beginPath();
+      for (let i = 0; i < NPT; i++) {
+        if (bkA[i] !== b) continue;
+        ctx.moveTo(sxA[i] + r, syA[i]); ctx.arc(sxA[i], syA[i], r, 0, 6.2832);
+      }
+      ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+  /* ---------- Yuqori qatlam: kursor izi va yuraklar yomg‘iri ---------- */
+  let F = fit($('fx'));
+  const parts = [];
+  let fxDirty = false;
+  function spawn(x, y, vx, vy, size, life, col, g) {
+    if (parts.length > 260) return;
+    parts.push({ x, y, vx, vy, size, life, max: life, col, g, rot: (Math.random() - .5) * .8, vr: (Math.random() - .5) * 3 });
+  }
+  function stepFx(dt) {
+    if (!parts.length) { if (fxDirty) { F.ctx.clearRect(0, 0, F.w, F.h); fxDirty = false; } return; }
+    const { ctx, w, h } = F;
+    ctx.clearRect(0, 0, w, h); fxDirty = true;
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      p.life -= dt;
+      if (p.life <= 0) { parts[i] = parts[parts.length - 1]; parts.pop(); continue; }
+      p.vy += p.g * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
+      ctx.globalAlpha = Math.min(1, p.life / p.max * 1.6);
+      ctx.fillStyle = p.col;
+      drawHeart(ctx, p.x, p.y, p.size, p.rot);
+    }
+    ctx.globalAlpha = 1;
+  }
+  function burst(x, y, n) {
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * 6.2832, sp = 140 + Math.random() * 380;
+      spawn(x, y, Math.cos(a) * sp, Math.sin(a) * sp - 160, 12 + Math.random() * 20, 1.8 + Math.random() * 1.4, pick(COLORS), 420);
+    }
+  }
+  let lastTrail = 0;
+  window.addEventListener('pointermove', (e) => {
+    mouse.x = e.clientX; mouse.y = e.clientY;
+    tpx = (e.clientX / window.innerWidth - .5) * -2;
+    tpy = (e.clientY / window.innerHeight - .5) * -2;
+    if (RM || e.pointerType !== 'mouse') return;
+    const now = performance.now();
+    if (now - lastTrail > 70) {
+      lastTrail = now;
+      spawn(e.clientX, e.clientY, (Math.random() - .5) * 30, -30 - Math.random() * 40, 8 + Math.random() * 7, 1.1, pick(COLORS), -20);
+    }
+  }, { passive: true });
+
+  /* ---------- Karta: sichqoncha bilan 3D egilish ---------- */
+  const card = $('card');
+  let rx = 0, ry = 0, trx = 0, try_ = 0, gx = 30, gy = 0, tgx = 30, tgy = 0, driveUntil = 0;
+  window.addEventListener('pointermove', (e) => {
+    if (RM) return;
+    driveUntil = performance.now() + 2500;
+    const r = card.getBoundingClientRect();
+    const dx = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+    const dy = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+    try_ = Math.max(-1, Math.min(1, dx)) * 11;
+    trx = -Math.max(-1, Math.min(1, dy)) * 8;
+    tgx = Math.max(-20, Math.min(120, (e.clientX - r.left) / r.width * 100));
+    tgy = Math.max(-20, Math.min(120, (e.clientY - r.top) / r.height * 100));
+  }, { passive: true });
+  function stepCard(now) {
+    if (RM) return;
+    if (now > driveUntil) {
+      trx = Math.sin(now / 1400) * 5; try_ = Math.cos(now / 1900) * 8;
+      tgx = 50 + Math.cos(now / 1900) * 40; tgy = 30 + Math.sin(now / 1400) * 40;
+    }
+    rx += (trx - rx) * .08; ry += (try_ - ry) * .08; gx += (tgx - gx) * .1; gy += (tgy - gy) * .1;
+    card.style.setProperty('--rx', rx.toFixed(2) + 'deg');
+    card.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+    card.style.setProperty('--gx', gx.toFixed(1) + '%');
+    card.style.setProperty('--gy', gy.toFixed(1) + '%');
+  }
+
+  /* ---------- Asosiy sikl ---------- */
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    stepBg(dt); stepHeart(now / 1000); stepCard(now); stepFx(dt);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* ---------- Hisoblagich ---------- */
+  const target = new Date(CONFIG.when).getTime();
+  const two = (n) => String(n).padStart(2, '0');
+  function tick() {
+    let s = Math.floor((target - Date.now()) / 1000);
+    if (s <= 0) {
+      $('cD').textContent = $('cH').textContent = $('cM').textContent = $('cS').textContent = '00';
+      return;
+    }
+    $('cD').textContent = two(Math.floor(s / 86400)); s %= 86400;
+    $('cH').textContent = two(Math.floor(s / 3600)); s %= 3600;
+    $('cM').textContent = two(Math.floor(s / 60));
+    $('cS').textContent = two(s % 60);
+  }
+  tick(); setInterval(tick, 1000);
+
+  /* ---------- Tugmalar ---------- */
+  const yes = $('yes'), no = $('no'), slot = $('slot');
+  let dodges = 0, flying = false, done = false;
+  const MAX_DODGE = 5;
+
+  function dodge() {
+    if (done || dodges >= MAX_DODGE) return;
+    dodges++;
+    if (!flying) {
+      const r = no.getBoundingClientRect();
+      slot.style.width = r.width + 'px'; slot.style.height = r.height + 'px';
+      document.body.appendChild(no); no.classList.add('flying'); flying = true;
+      no.style.left = r.left + 'px'; no.style.top = r.top + 'px';
+      void no.offsetWidth;
+    }
+    if (dodges >= MAX_DODGE) { comeBack(); return; }
+    const w = no.offsetWidth, h = no.offsetHeight, m = 16;
+    let x, y, tries = 0;
+    do {
+      x = m + Math.random() * Math.max(1, window.innerWidth - w - 2 * m);
+      y = m + 60 + Math.random() * Math.max(1, window.innerHeight - h - 2 * m - 120);
+      tries++;
+    } while (tries < 14 && Math.hypot(x + w / 2 - mouse.x, y + h / 2 - mouse.y) < 160);
+    no.style.left = x + 'px'; no.style.top = y + 'px';
+  }
+  function comeBack() {
+    flying = false; no.classList.remove('flying');
+    no.style.left = ''; no.style.top = '';
+    slot.appendChild(no); slot.style.width = ''; slot.style.height = '';
+    no.textContent = 'Mayli, boraman'; no.classList.add('primary');
+  }
+  no.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') dodge(); });
+  no.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse' && dodges < MAX_DODGE) { e.preventDefault(); dodge(); }
+  });
+  no.addEventListener('click', () => { if (dodges >= MAX_DODGE) accept(); else dodge(); });
+  yes.addEventListener('click', accept);
+
+  function accept() {
+    if (done) return;
+    done = true;
+    const r = (dodges >= MAX_DODGE ? no : yes).getBoundingClientRect();
+    const ox = r.left + r.width / 2, oy = r.top + r.height / 2;
+    if (!RM) { burst(ox, oy, 90); setTimeout(() => burst(window.innerWidth / 2, window.innerHeight * .4, 70), 320); }
+    $('actions').hidden = true;
+    if (no.parentNode === document.body) no.remove();
+    card.classList.add('accepted');
+    $('label').textContent = 'Taklif qabul qilindi';
+    $('title').textContent = 'Rahmat, sizni kutaman';
+    $('msg').textContent = 'Chorshanba, soat 11:00, Navruz mall oldida ko‘rishamiz.';
+    $('reply').textContent = 'Ko‘rishguncha.';
+  }
+
+  /* ---------- Musiqa: Web Audio bilan yaratilgan yumshoq kuy ---------- */
+  let ac = null, master = null, bus = null, timer = null, nextT = 0, step = 0, playing = false, lastMel = 0;
+  const BPM = 66, EIGHTH = 60 / BPM / 2;
+  const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
+  const CH = [
+    { bass: 45, tones: [57, 60, 64], mel: [72, 76, 69, 79, 81] },
+    { bass: 41, tones: [57, 60, 65], mel: [72, 69, 77, 81, 76] },
+    { bass: 48, tones: [55, 60, 64], mel: [72, 76, 79, 67, 84] },
+    { bass: 43, tones: [55, 59, 62], mel: [71, 74, 79, 67, 83] }
+  ];
+  const ARP = [0, 1, 2, 1, 2, 1, 2, 1];
+
+  function setupAudio() {
+    if (ac) return;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    ac = new AC();
+    master = ac.createGain(); master.gain.value = 0; master.connect(ac.destination);
+    bus = ac.createGain(); bus.connect(master);
+    const dly = ac.createDelay(1); dly.delayTime.value = .43;
+    const fb = ac.createGain(); fb.gain.value = .4;
+    const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2200;
+    bus.connect(dly); dly.connect(lp); lp.connect(fb); fb.connect(dly); lp.connect(master);
+  }
+  function note(f, t, dur, type, vol, att) {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = type; o.frequency.value = f;
+    g.gain.setValueAtTime(.0001, t);
+    g.gain.linearRampToValueAtTime(vol, t + (att || .02));
+    g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(g); g.connect(bus); o.start(t); o.stop(t + dur + .05);
+  }
+  function schedule() {
+    while (nextT < ac.currentTime + .5) {
+      const bar = Math.floor(step / 8) % 4, pos = step % 8, c = CH[bar];
+      if (pos === 0) {
+        note(mtof(c.bass), nextT, EIGHTH * 8, 'sine', .17, .05);
+        c.tones.forEach((m) => note(mtof(m), nextT, EIGHTH * 8, 'sine', .035, 1.2));
+      }
+      note(mtof(c.tones[ARP[pos]] + 12), nextT, EIGHTH * 3, 'triangle', .05, .02);
+      if (pos === 0 || pos === 4 || (pos === 6 && Math.random() < .5) || (pos === 2 && Math.random() < .3)) {
+        let m = pick(c.mel); if (m === lastMel) m = pick(c.mel); lastMel = m;
+        note(mtof(m), nextT, 1.8, 'sine', .075, .01);
+        note(mtof(m) * 2, nextT, .9, 'sine', .02, .01);
+      }
+      nextT += EIGHTH; step++;
+    }
+  }
+  const mbtn = $('music'), mlabel = $('musicLabel');
+  function setMusic(on) {
+    if (on) {
+      try { setupAudio(); ac.resume(); } catch (e) { return; }
+      nextT = ac.currentTime + .1;
+      clearInterval(timer); timer = setInterval(schedule, 100); schedule();
+      master.gain.cancelScheduledValues(ac.currentTime);
+      master.gain.linearRampToValueAtTime(.85, ac.currentTime + 2);
+    } else if (ac) {
+      clearInterval(timer);
+      master.gain.cancelScheduledValues(ac.currentTime);
+      master.gain.linearRampToValueAtTime(0, ac.currentTime + .6);
+    }
+    playing = on;
+    mbtn.classList.toggle('on', on); mbtn.classList.remove('hint');
+    mbtn.setAttribute('aria-pressed', String(on));
+    mlabel.textContent = on ? 'Musiqani o‘chirish' : 'Musiqani yoqish';
+  }
+  mbtn.addEventListener('click', () => setMusic(!playing));
+  document.addEventListener('visibilitychange', () => {
+    if (!ac || !playing) return;
+    if (document.hidden) ac.suspend(); else ac.resume();
+  });
+
+  window.addEventListener('resize', () => {
+    B = fit($('bg')); F = fit($('fx')); H = fit($('heart3d'));
+    if (flying) {
+      const w = no.offsetWidth, h = no.offsetHeight;
+      no.style.left = Math.min(parseFloat(no.style.left) || 16, Math.max(16, window.innerWidth - w - 16)) + 'px';
+      no.style.top = Math.min(parseFloat(no.style.top) || 16, Math.max(16, window.innerHeight - h - 16)) + 'px';
+    }
+  });
+})();
+</script>
+
+</body></html>
